@@ -1,0 +1,8 @@
+.calendar-page-content {
+    overflow: hidden;
+    width: 90%;
+}
+
+.calendar-page-content h1 {
+    margin-left: 90px;
+}
