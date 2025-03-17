@@ -1,12 +1,16 @@
-import React from "react";
-import Calendar from "../../components/Calendar/calendar";
-import './CalendarPage.css'
+import React, { useState } from "react";
+import Sidebar from "../../components/Sidebar/sidebar";  // Importar o Sidebar aqui
+import Calendar from "../../components/Calendar/Calendar/Calendar";
+import './CalendarPage.css';
 
 const CalendarPage = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
-    <div className="calendar-page-content">
-      <h1>Meu Calendário</h1>
-      <Calendar />
+    <div>
+      <div className="content-main">
+        <Calendar isSidebarOpen={isSidebarOpen} />
+      </div>
     </div>
   );
 };

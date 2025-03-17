@@ -1,0 +1,38 @@
+.calendar-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+  transition: all 0.3s ease; /* Transição suave */
+}
+
+.fc-daygrid-day {
+  background-color: #f9f9f9;
+  overflow: visible !important;
+}
+
+.fc-daygrid-event {
+  background-color: #A85FD9;
+  color: white;
+  border-radius: 5px;
+  padding: 2px 5px;
+  z-index: 10 !important;
+  position: relative; 
+  overflow: visible !important;
+}
+
+.fc-daygrid-event.fc-event-start {
+  z-index: 2; /* Garante que o evento não fique atrás de outros */
+}
+
+.fc-daygrid-event.fc-event-end {
+  z-index: 2; /* Garante que o evento não fique atrás de outros */
+}
+
+.fc-event-title {
+  font-size: 14px;
+}
+
+.fc-event {
+  white-space: nowrap !important; /* Evita quebra de linha que pode fazer o evento desaparecer */
+}

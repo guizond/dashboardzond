@@ -1,13 +1,24 @@
 import './sidebar.css';
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaHome, FaCalendarAlt, FaQuestionCircle } from 'react-icons/fa';
-import Calendar from '../Calendar/calendar';
+import { Link, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaHome, FaCalendarAlt, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
+import Calendar from '../Calendar/Calendar/Calendar';
+import { auth } from '../../firebaseConfig';
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleSidebar = () => setIsOpen(!isOpen);
+
+    const handleLogout = async () => {
+        try {
+            await auth.signOut();
+            navigate("/authpage");
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+        }
+    };
 
     return (
         <div className={`sidebar-container ${isOpen ? 'expanded' : 'collapsed'}`}>
@@ -22,6 +33,12 @@ const Sidebar = () => {
                         <Link to="/faq" className="menu-item"><FaQuestionCircle className="menu-icon" /> {isOpen && "FAQ"}</Link>
                     </>
             </div>
+
+            <div className="logout-container" onClick={handleLogout}>
+                <FaSignOutAlt className="menu-icon" />
+                {isOpen && <span>Logout</span>}
+            </div>
+
         </div>
     );
 };
