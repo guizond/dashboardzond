@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import './AuthPage.css';
 
@@ -7,6 +7,7 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
@@ -22,8 +23,14 @@ const AuthPage = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("Cadastro bem-sucedido!");
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateProfile(user, { displayName: name });
+      console.log("Cadastro bem-sucedido! Nome salvo:", user.displayName);
+
+      // Atualiza a página ou redireciona após o cadastro
+      window.location.reload(); 
     } catch (error) {
       setError(error.message);
     }
@@ -31,9 +38,7 @@ const AuthPage = () => {
 
   return (
     <div className="auth-container">
-
       <div className="auth-left"></div>
-
       <div className="auth-right">
         <button onClick={() => setIsLogin(!isLogin)} className="toggle-button">
           {isLogin ? "Criar uma conta" : "Já tenho uma conta"}
@@ -43,6 +48,20 @@ const AuthPage = () => {
           <h2>{isLogin ? "Login" : "Cadastro"}</h2>
 
           <form onSubmit={isLogin ? handleLogin : handleRegister}>
+            {!isLogin && (
+              <div>
+                <label htmlFor="name" className="label-tittle">Nome:</label>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Insira seu nome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+
             <div>
               <label htmlFor="email" className="label-tittle">Email:</label>
               <input

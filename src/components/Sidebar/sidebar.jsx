@@ -2,6 +2,7 @@ import './sidebar.css';
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes, FaHome, FaCalendarAlt, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
+import { FaComputer } from "react-icons/fa6";
 import Calendar from '../Calendar/Calendar/Calendar';
 import { auth } from '../../firebaseConfig';
 
@@ -31,6 +32,7 @@ const Sidebar = () => {
                         <Link to="/" className="menu-item"><FaHome className="menu-icon" /> {isOpen && "Home"}</Link>
                         <Link to="/calendar" className="menu-item"><FaCalendarAlt className="menu-icon" /> {isOpen && "Calendário"}</Link>
                         <Link to="/faq" className="menu-item"><FaQuestionCircle className="menu-icon" /> {isOpen && "FAQ"}</Link>
+                        <Link to="/builders" className="menu-item"><FaComputer className="menu-icon" /> {isOpen && "Builders"}</Link>
                     </>
             </div>
 

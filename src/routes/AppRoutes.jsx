@@ -9,6 +9,7 @@ import FAQPage from "../Pages/FaqPage/FAQPage";
 import MainLayout from "../components/MainLayout";
 import { auth } from "../firebaseConfig";
 import ProtectedRoute from "./ProtectedRoute";
+import BuildersPage from "../Pages/BuildersPage/BuildersPage";
 
 const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -39,6 +40,7 @@ const AppRoutes = () => {
               <Route path="/" element={<Home />} />
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/faq" element={<FAQPage />} />
+              <Route path="/builders" element={<BuildersPage />} />
           </Route>
 
           {/* Redireciona qualquer rota desconhecida para o login */}

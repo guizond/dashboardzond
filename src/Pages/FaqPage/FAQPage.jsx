@@ -74,35 +74,37 @@ const FAQPage = () => {
 
       {/* Modal de Adicionar FAQ */}
       {isFormOpen && (
-        <div className="modal">
-          <h2>Adicionar FAQ</h2>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Título"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <textarea
-              placeholder="Descrição"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <input
-              type="url"
-              placeholder="Link do Documento"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              required
-            />
-            <div className="modal-buttons">
-              <button type="submit">Salvar</button>
-              <button type="button" onClick={() => setIsFormOpen(false)}>Fechar</button>
-            </div>
-          </form>
+  <div className="modal-overlay" onClick={() => setIsFormOpen(false)}>
+    <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <h2>Adicionar FAQ</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Título"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <textarea
+          placeholder="Descrição"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <input
+          type="url"
+          placeholder="Link do Documento"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          required
+        />
+        <div className="modal-buttons">
+          <button type="submit">Salvar</button>
+          <button type="button" onClick={() => setIsFormOpen(false)}>Fechar</button>
         </div>
-      )}
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 };
