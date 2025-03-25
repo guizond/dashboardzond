@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import './BuildersPage.css';
 
@@ -76,15 +76,20 @@ const BuildersPage = () => {
         setBuilders(builders.filter(builder => builder.id !== id));
     };
 
-    const toggleActiveStatus = (id) => {
+    const toggleActiveStatus = async (id) => {
+        const builderRef = doc(db, "builders", id);
         const updatedBuilders = builders.map(builder => 
             builder.id === id ? { ...builder, isActive: !builder.isActive } : builder
         );
         setBuilders(updatedBuilders);
+        
+        await updateDoc(builderRef, { isActive: !builders.find(builder => builder.id === id).isActive });
     };
 
     const handleCardClick = (id) => {
-        setExpandedCard(expandedCard === id ? null : id);
+        if (expandedCard === null) {
+            setExpandedCard(id);
+        }
     };
 
     return (
@@ -94,16 +99,13 @@ const BuildersPage = () => {
             <div className="builders-list">
                 {builders.map((builder) => (
                     <div key={builder.id} className="builder-card" onClick={() => handleCardClick(builder.id)}>
-                        <h3>{`${builder.whitelabel} - ${builder.builderName}`}</h3>
-                        <div className="builder-switch">
-                            <label>
-                                Ativo:
-                                <input 
-                                    type="checkbox" 
-                                    checked={builder.isActive} 
-                                    onChange={() => toggleActiveStatus(builder.id)} 
-                                />
-                            </label>
+                        <div className="builder-card-header">
+                            <h3>{`${builder.whitelabel} - ${builder.builderName}`}</h3>
+                            <div className="builder-switch" onClick={(e) => e.stopPropagation()}>
+                                <span className={`switch ${builder.isActive ? "active" : ""}`} onClick={() => toggleActiveStatus(builder.id)}>
+                                    <span className="switch-handle"></span>
+                                </span>
+                            </div>
                         </div>
                         
                         {expandedCard === builder.id && (

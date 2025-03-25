@@ -55,6 +55,7 @@
 .card-header {
     font-size: 18px;
     font-weight: bold;
+    display: flex;
 }
 
 /* Estilização para quando o card estiver expandido */
@@ -188,4 +189,54 @@
 .support-group select:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(168, 95, 217, 0.5);
+}
+
+.builder-switch {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: auto;  /* Ajuste o tamanho para ser apenas o necessário */
+    cursor: pointer;  /* Mostra um cursor de clique para indicar interatividade */
+}
+
+
+.switch {
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.switch.active {
+    background-color: #4caf50;
+}
+
+.switch-handle {
+    width: 18px;
+    height: 18px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    transition: transform 0.3s ease;
+}
+
+.switch.active .switch-handle {
+    transform: translateX(20px);
+}
+
+.builder-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.builder-card-header h3 {
+    margin: 0;
+    flex-grow: 1;
+    white-space: nowrap;
 }
