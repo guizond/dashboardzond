@@ -23,7 +23,7 @@ const AppRoutes = () => {
   }, []);
 
   if (isAuthenticated === null) {
-    return <div>Carregando...</div>; // Evita redirecionamento antes da checagem
+    return <div>Carregando...</div>;
   }
 
   return (
@@ -32,10 +32,8 @@ const AppRoutes = () => {
       {isAuthenticated && <Sidebar />}
       <div className="content-container">
         <Routes>
-          {/* Rota de autenticação */}
           <Route path="/authpage" element={isAuthenticated ? <Navigate to="/" /> : <AuthPage />} />
 
-          {/* Rota protegida, apenas usuários logados podem acessar */}
           <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Home />} />
               <Route path="/calendar" element={<CalendarPage />} />
@@ -43,7 +41,6 @@ const AppRoutes = () => {
               <Route path="/builders" element={<BuildersPage />} />
           </Route>
 
-          {/* Redireciona qualquer rota desconhecida para o login */}
           <Route path="*" element={<Navigate to="/authpage" />} />
         </Routes>
       </div>

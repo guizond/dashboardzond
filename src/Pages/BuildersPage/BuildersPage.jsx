@@ -19,8 +19,8 @@ const BuildersPage = () => {
     const [storeLanguage, setStoreLanguage] = useState("");
     const [builderLanguage, setBuilderLanguage] = useState("");
     const [storeCountry, setStoreCountry] = useState("");
-    const [expandedCard, setExpandedCard] = useState(null); // For expanding the card
-    const [isActive, setIsActive] = useState(true); // For active/inactive state
+    const [expandedCard, setExpandedCard] = useState(null);
+    const [isActive, setIsActive] = useState(true);
 
     const buildersCollectionRef = collection(db, "builders");
       
@@ -51,7 +51,7 @@ const BuildersPage = () => {
             storeLanguage, 
             builderLanguage, 
             storeCountry,
-            isActive // Store active/inactive status
+            isActive
         };
       
         const docRef = await addDoc(buildersCollectionRef, newBuilder);

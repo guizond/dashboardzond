@@ -18,6 +18,7 @@ const Calendar = () => {
   const [clickTimeout, setClickTimeout] = useState(null);
   const [eventDetails, setEventDetails] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -62,6 +63,10 @@ const Calendar = () => {
       setIsModalOpen(true);
       setEventDetails(null);
       setIsEditing(false);
+
+      const adjustedEndDate = new Date(arg.dateStr);
+      adjustedEndDate.setMinutes(adjustedEndDate.getMinutes() + 30);
+      setSelectedEndDate(adjustedEndDate.toISOString().slice(0, 16));
   };
 
   const handleEventClick = (info) => {
@@ -69,8 +74,8 @@ const Calendar = () => {
           id: info.event.id,
           title: info.event.title,
           description: info.event.extendedProps.description || "",
-          start: info.event.start,
-          end: info.event.end
+          start: info.event.startStr,
+        end: info.event.endStr
       });
       setIsModalOpen(true);
       setSelectedDate(info.event.startStr);
@@ -176,37 +181,39 @@ return (
         eventResize={handleEventResize}
         eventDurationEditable={true}
         eventOverlap={true}
-        displayEventTime={true}  // Certifica que o tempo do evento será mostrado
+        displayEventTime={true}
         allDaySlot={true}
         longPressDelay={300}
       />
   
-      {isModalOpen && (
-        <div className="modal-overlay">
-          {isEditing && (
+  {isModalOpen && (
+    <div className="modal-overlay">
+        {isEditing && (
             <EventForm
-              onSave={handleSaveEvent}
-              onClose={() => setIsModalOpen(false)}
-              eventDetails={eventDetails}
+                onSave={handleSaveEvent}
+                onClose={() => setIsModalOpen(false)}
+                eventDetails={eventDetails}
             />
-          )}
-  
-          {!isEditing && eventDetails && (
+        )}
+
+        {!isEditing && eventDetails && (
             <EventDetails
-              event={eventDetails}
-              onEdit={handleEditEvent}
-              onDelete={handleDeleteEvent}
-              onClose={() => setIsModalOpen(false)}
+                event={eventDetails}
+                onEdit={handleEditEvent}
+                onDelete={handleDeleteEvent}
+                onClose={() => setIsModalOpen(false)}
             />
-          )}
-  
-          {!eventDetails && !isEditing && (
+        )}
+
+        {!eventDetails && !isEditing && (
             <EventForm
-              onSave={handleSaveEvent}
-              onClose={() => setIsModalOpen(false)}
+                onSave={handleSaveEvent}
+                onClose={() => setIsModalOpen(false)}
+                start={selectedDate}  // Passando a data de início
+                end={selectedEndDate}  // Passando a data de fim
             />
-          )}
-        </div>
+        )}
+    </div>
       )}
     </div>
   );

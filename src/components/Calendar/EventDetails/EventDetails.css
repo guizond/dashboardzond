@@ -1,85 +1,91 @@
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 450px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  
-  .modal h2 {
-    margin-bottom: 20px;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .close-button {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #f1f1f1;
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.modal {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+}
+
+.close-button {
+  position: absolute;
+  top:0px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #a0a0a0;
 }
 
 .close-button:hover {
-    color: #e7cdf8;
+  color: #e7cdf8;
 }
-  
-  .event-details {
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .event-details p {
-    margin: 10px 0;
-  }
-  
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
-  
-  .modal-buttons button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .edit-button {
-    background-color: #A85FD9;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .edit-button:hover {
-    background-color: #8c4bb7;
-  }
-  
-  .delete-button {
-    background-color: #f2f2f2;
-    color: black;
-  }
-  
-  .delete-button:hover {
-    background-color: #bbb;
-  }
+
+.event-details {
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.event-details p {
+  margin: 10px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-button {
+  background-color: #A85FD9;
+  color: white;
+  font-weight: bold;
+}
+
+.edit-button:hover {
+  background-color: #8c4bb7;
+}
+
+.delete-button {
+  background-color: #f2f2f2;
+  color: black;
+}
+
+.delete-button:hover {
+  background-color: #bbb;
+}

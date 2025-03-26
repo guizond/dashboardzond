@@ -37,7 +37,6 @@ const FAQPage = () => {
       setIsFormOpen(false);
     };
   
-    // 🔹 Deletar um FAQ do Firestore
     const handleDelete = async (id) => {
       await deleteDoc(doc(db, "faqs", id));
       setFaqs(faqs.filter(faq => faq.id !== id));
@@ -45,12 +44,10 @@ const FAQPage = () => {
 
   return (
     <div className="faq-container">
-      {/* Container para alinhar o botão à direita */}
       <div className="faq-header-container">
         <button className="add-faq-button" onClick={() => setIsFormOpen(true)}>+ Adicionar FAQ</button>
       </div>
-      
-      {/* Lista de FAQs */}
+
       <div className="faq-list">
         {faqs.map((faq) => (
           <div key={faq.id} className="faq-card" onClick={() => setSelectedFaq(selectedFaq === faq.id ? null : faq.id)}>
@@ -70,7 +67,6 @@ const FAQPage = () => {
         ))}
       </div>
 
-      {/* Modal de Adicionar FAQ */}
       {isFormOpen && (
   <div className="modal-overlay" onClick={() => setIsFormOpen(false)}>
     <div className="modal" onClick={(e) => e.stopPropagation()}>
