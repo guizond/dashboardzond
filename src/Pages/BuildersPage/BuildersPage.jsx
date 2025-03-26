@@ -97,7 +97,7 @@ const BuildersPage = () => {
             <div className="builder-header-container">
                 <button className="add-builder-button" onClick={() => setIsFormOpen(true)}>+ Adicionar Builder</button>
             </div>
-            
+
             <div className="builders-list">
                 {builders.map((builder) => (
                     <div key={builder.id} className="builder-card" onClick={() => handleCardClick(builder.id)}>
