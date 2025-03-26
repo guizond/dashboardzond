@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 const Header = () => {
     return (
       <header className="header">
-        <h1>Logo</h1>
+        <h1>O</h1>
       </header>
     );
   };

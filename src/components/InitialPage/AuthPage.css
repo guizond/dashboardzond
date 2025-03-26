@@ -67,9 +67,15 @@
   right: 20px;
   background: none;
   border: none;
-  color: #A85FD9;
+  color: #fff;
+  background-color: #A85FD9;
   cursor: pointer;
   font-size: 14px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 170px;
 }
 
 .toggle-button:hover {

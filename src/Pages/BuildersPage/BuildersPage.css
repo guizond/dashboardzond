@@ -26,6 +26,12 @@
     margin-bottom: 20px;
 }
 
+.builder-header-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+  }
+
 .add-builder-button:hover {
     background-color: #8c4bb8;
 }
