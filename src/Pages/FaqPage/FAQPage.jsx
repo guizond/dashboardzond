@@ -11,11 +11,10 @@ const FAQPage = () => {
     const [description, setDescription] = useState("");
     const [link, setLink] = useState("");
   
-    // 🔹 Referência à coleção "faqs" no Firestore
     const faqsCollectionRef = collection(db, "faqs");
   
-    // 🔹 Buscar FAQs do Firestore ao carregar a página
     useEffect(() => {
+      document.title = "Documentação";
       const fetchFaqs = async () => {
         const data = await getDocs(faqsCollectionRef);
         setFaqs(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
@@ -24,7 +23,6 @@ const FAQPage = () => {
       fetchFaqs();
     }, []);
   
-    // 🔹 Adicionar um novo FAQ ao Firestore
     const handleSubmit = async (e) => {
       e.preventDefault();
   
@@ -106,7 +104,7 @@ const FAQPage = () => {
   </div>
 )}
     </div>
-  );
+    );
 };
 
 export default FAQPage;

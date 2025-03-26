@@ -79,30 +79,26 @@ const Calendar = () => {
 
   const handleSaveEvent = async ({ id, title, description, start, end }) => {
     try {
-        if (id) {
-            const eventRef = doc(db, "events", id);
-            await updateDoc(eventRef, { title, description, start, end });
-            setEvents(events.map(event => event.id === id ? { ...event, title, description, start, end } : event));
-        } else {
-            const newEvent = {
-                title,
-                description,
-                start: start ? new Date(start).toISOString() : new Date().toISOString(),
-                end: end ? new Date(end).toISOString() : new Date().toISOString(),
-            };
-
-            const docRef = await addDoc(collection(db, "events"), newEvent);
-            setEvents([...events, { id: docRef.id, ...newEvent }]);
-        }
+      if (!end) {
+        const startTime = new Date(start);
+        end = new Date(startTime.getTime() + 30 * 60000).toISOString();
+      }
+  
+      if (id) {
+        const eventRef = doc(db, "events", id);
+        await updateDoc(eventRef, { title, description, start, end });
+        setEvents(events.map(event => event.id === id ? { ...event, title, description, start, end } : event));
+      } else {
+        const newEvent = { title, description, start, end };
+        const docRef = await addDoc(collection(db, "events"), newEvent);
+        setEvents([...events, { id: docRef.id, ...newEvent }]);
+      }
     } catch (error) {
-        console.error("Erro ao salvar evento:", error);
+      console.error("Erro ao salvar evento:", error);
     }
-
+  
     setIsModalOpen(false);
-    setSelectedDate(null);
-    setEventDetails(null);
-    setIsEditing(false);
-};
+  };
 
 const handleEventDrop = async (info) => {
     try {

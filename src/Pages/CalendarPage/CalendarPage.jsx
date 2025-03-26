@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-import Sidebar from "../../components/Sidebar/sidebar";  // Importar o Sidebar aqui
+import React, { useState, useEffect } from "react";
+import Sidebar from "../../components/Sidebar/sidebar";
 import Calendar from "../../components/Calendar/Calendar/Calendar";
 import './CalendarPage.css';
 
 const CalendarPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = "Calendário";
+  })
 
   return (
     <div>

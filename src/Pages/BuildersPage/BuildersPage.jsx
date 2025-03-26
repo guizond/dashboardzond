@@ -25,7 +25,8 @@ const BuildersPage = () => {
     const buildersCollectionRef = collection(db, "builders");
       
     useEffect(() => {
-      const fetchBuilders = async () => {
+        document.title = "Builders";
+        const fetchBuilders = async () => {
         const data = await getDocs(buildersCollectionRef);
         setBuilders(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
       };

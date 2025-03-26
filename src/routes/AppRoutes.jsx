@@ -39,7 +39,7 @@ const AppRoutes = () => {
           <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Home />} />
               <Route path="/calendar" element={<CalendarPage />} />
-              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/docs" element={<FAQPage />} />
               <Route path="/builders" element={<BuildersPage />} />
           </Route>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import './AuthPage.css';
@@ -9,6 +9,10 @@ const AuthPage = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+      document.title = "Dropsmart";
+    })
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,7 +33,6 @@ const AuthPage = () => {
       await updateProfile(user, { displayName: name });
       console.log("Cadastro bem-sucedido! Nome salvo:", user.displayName);
 
-      // Atualiza a página ou redireciona após o cadastro
       window.location.reload(); 
     } catch (error) {
       setError(error.message);

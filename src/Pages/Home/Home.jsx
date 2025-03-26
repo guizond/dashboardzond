@@ -6,6 +6,7 @@ const Home = () => {
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
+    document.title = "Home";
     const user = auth.currentUser;
     if (user) {
       setUserName(user.displayName);

@@ -4,13 +4,15 @@ import './EventForm.css';
 const EventForm = ({ onSave, onClose }) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [start, setStart] = useState("");
+    const [end, setEnd] = useState("");
 
-    // Função para expandir automaticamente o textarea
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
-        e.target.style.height = "auto"; // Reseta a altura antes de redimensionar
-        e.target.style.height = e.target.scrollHeight + "px"; // Ajusta conforme o conteúdo
+        e.target.style.height = "auto";
+        e.target.style.height = e.target.scrollHeight + "px";
     };
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -40,7 +42,7 @@ const EventForm = ({ onSave, onClose }) => {
                     <textarea className="form-description"
                         value={description}
                         onChange={handleDescriptionChange}
-                        style={{ minHeight: "50px", overflowY: "hidden" }} // Estilo inline para garantir o comportamento
+                        style={{ minHeight: "50px", overflowY: "hidden" }} 
                     />
                     <div className="modal-buttons">
                         <button type="submit">Salvar</button>
