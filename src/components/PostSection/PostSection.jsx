@@ -5,25 +5,22 @@ import React, { useState, useEffect } from "react";
 import "./PostSection.css";
 
 const PostSection = ({ userId }) => {
-  
     const [posts, setPosts] = useState([]);
     const [newPost, setNewPost] = useState("");
     const [editingPost, setEditingPost] = useState(null);
     const [editText, setEditText] = useState("");
-    const [menuOpen, setMenuOpen] = useState(null); // Armazena qual post está com o menu aberto
+    const [menuOpen, setMenuOpen] = useState(null);
 
     const auth = getAuth();
-    const user = auth.currentUser; // Obtém o usuário logado
+    const user = auth.currentUser;
     const userName = user?.displayName || "Usuário Anônimo";
 
-    // Busca os posts em tempo real e ordena do mais recente para o mais antigo
     useEffect(() => {
         const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
             const postsData = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...doc.data(),
             }));
-            // Ordenação dos posts por timestamp
             postsData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             setPosts(postsData);
         });
@@ -32,11 +29,10 @@ const PostSection = ({ userId }) => {
     }, []);
 
     if (!userId) {
-      console.warn("Aviso: userId não está definido. Usuário precisa estar logado.");
-      return <p>Carregando...</p>;
+        console.warn("Aviso: userId não está definido. Usuário precisa estar logado.");
+        return <p>Carregando...</p>;
     }
 
-    // Adicionar um novo post
     const handlePostSubmit = async () => {
         if (!newPost.trim()) return;
         try {
@@ -45,7 +41,8 @@ const PostSection = ({ userId }) => {
                 timestamp: new Date(),
                 reactions: { like: [], love: [] },
                 comments: [],
-                userName: userName, // Usa o nome do usuário logado
+                userName: userName,
+                userId: userId,
             });
             setNewPost("");
         } catch (error) {
@@ -53,7 +50,6 @@ const PostSection = ({ userId }) => {
         }
     };
 
-    // Deletar um post
     const handleDeletePost = async (id) => {
         try {
             await deleteDoc(doc(db, "posts", id));
@@ -62,7 +58,6 @@ const PostSection = ({ userId }) => {
         }
     };
 
-    // Editar um post
     const handleEditPost = async (id) => {
         if (!editText.trim()) return;
         try {
@@ -76,79 +71,48 @@ const PostSection = ({ userId }) => {
         }
     };
 
-    // Reagir ao post (like/love)
-    const handleReaction = async (postId, type) => {
-      if (!userId) {
-          console.error("Erro: userId indefinido");
-          return;
-      }
+    const toggleMenu = (postId) => {
+        setMenuOpen(menuOpen === postId ? null : postId);
+    };
 
-      try {
-          const postRef = doc(db, "posts", postId);
-          const postSnapshot = await getDoc(postRef);
-
-          if (!postSnapshot.exists()) {
-              console.error("Erro: Post não encontrado");
-              return;
-          }
-
-          const postData = postSnapshot.data();
-          const currentReactions = postData.reactions?.[type] || [];
-
-          if (currentReactions.some(reaction => reaction.userId === userId)) {
-              await updateDoc(postRef, {
-                  [`reactions.${type}`]: arrayRemove({ userId, userName: userName })
-              });
-          } else {
-              await updateDoc(postRef, {
-                  [`reactions.${type}`]: arrayUnion({ userId, userName: userName })
-              });
-          }
-      } catch (error) {
-          console.error("Erro ao reagir ao post:", error);
-      }
-  };
-
-    // Adicionar um comentário
-    const handleAddComment = async (id, comment) => {
-      if (!comment.trim()) return;
-      try {
-          await updateDoc(doc(db, "posts", id), {
-              comments: arrayUnion({ text: comment, userName: userName }) // Adiciona o nome do usuário no comentário
-          });
-      } catch (error) {
-          console.error("Erro ao adicionar comentário:", error);
-      }
-  };
-
-    // Excluir um comentário
-    const handleDeleteComment = async (postId, commentText) => {
+    const handleReaction = async (postId, reactionType) => {
         try {
             const postRef = doc(db, "posts", postId);
-            const postSnapshot = await getDoc(postRef);
+            const postSnap = await getDoc(postRef);
+            if (!postSnap.exists()) return;
 
-            if (!postSnapshot.exists()) {
-                console.error("Erro: Post não encontrado");
-                return;
-            }
-
-            const postData = postSnapshot.data();
-            const updatedComments = postData.comments.filter(comment => comment.text !== commentText); // Remove o comentário com base no texto
-
+            const postData = postSnap.data();
+            const userReacted = postData.reactions[reactionType]?.includes(userId);
             await updateDoc(postRef, {
-                comments: updatedComments
+                [`reactions.${reactionType}`]: userReacted ? arrayRemove(userId) : arrayUnion(userId)
             });
         } catch (error) {
-            console.error("Erro ao excluir comentário:", error);
+            console.error("Erro ao reagir ao post:", error);
         }
     };
 
-    // Função para alternar a visibilidade do menu suspenso
-    const toggleMenu = (postId) => {
-        if (menuOpen === postId) {
-            setMenuOpen(null); // Fecha o menu se já estiver aberto
-        } else {
-            setMenuOpen(postId); // Abre o menu para o post selecionado
+    const handleAddComment = async (postId, commentText) => {
+        if (!commentText.trim()) return;
+        try {
+            await updateDoc(doc(db, "posts", postId), {
+                comments: arrayUnion({ userName, text: commentText })
+            });
+        } catch (error) {
+            console.error("Erro ao adicionar comentário:", error);
+        }
+    };
+
+    const handleDeleteComment = async (postId, commentText) => {
+        try {
+            const postRef = doc(db, "posts", postId);
+            const postSnap = await getDoc(postRef);
+            if (!postSnap.exists()) return;
+
+            const postData = postSnap.data();
+            const updatedComments = postData.comments.filter(comment => comment.text !== commentText);
+            await updateDoc(postRef, { comments: updatedComments });
+        } catch (error) {
+            console.error("Erro ao deletar comentário:", error);
         }
     };
 
@@ -167,15 +131,17 @@ const PostSection = ({ userId }) => {
                     posts.map((post) => (
                         <div key={post.id} className="post-item">
                             {editingPost === post.id ? (
-                                <>
-                                    <textarea
-                                        value={editText}
-                                        onChange={(e) => setEditText(e.target.value)}
-                                    />
+                                <div className="edit-post-container">
+                                <textarea
+                                    value={editText}
+                                    onChange={(e) => setEditText(e.target.value)}
+                                />
+                                <div className="edit-post-actions">
                                     <button onClick={() => handleEditPost(post.id)}>Salvar</button>
-                                    <button onClick={() => setEditingPost(null)}>Cancelar</button>
-                                </>
-                            ) : (
+                                    <button className="cancel-btn" onClick={() => setEditingPost(null)}>Cancelar</button>
+                                </div>
+                            </div>
+                        ) : (
                                 <>
                                     <p><strong>{post.userName}</strong> - {post.text} </p>
                                     <span className="timestamp">
@@ -184,30 +150,27 @@ const PostSection = ({ userId }) => {
                                             : new Date(post.timestamp).toLocaleString()}
                                     </span>
 
-                                    {/* Ícone de 3 bolinhas */}
-                                    <button onClick={() => toggleMenu(post.id)} className="post-menu-icon">
-                                        ⋮
-                                    </button>
-
-                                    {/* Menu suspenso */}
-                                    {menuOpen === post.id && (
-                                        <div className="dropdown-menu">
-                                            <button onClick={() => { setEditingPost(post.id); setEditText(post.text); }} >
-                                                ✏ Editar
+                                    {post.userId === userId && (
+                                        <>
+                                            <button onClick={() => toggleMenu(post.id)} className="post-menu-icon">
+                                                ⋮
                                             </button>
-                                            <button onClick={() => handleDeletePost(post.id)}>
-                                                🗑 Deletar
-                                            </button>
-                                        </div>
+                                            {menuOpen === post.id && (
+                                                <div className="dropdown-menu">
+                                                    <button onClick={() => { setEditingPost(post.id); setEditText(post.text); }} >
+                                                        ✏ Editar
+                                                    </button>
+                                                    <button onClick={() => handleDeletePost(post.id)}>
+                                                        🗑 Deletar
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </>
                                     )}
 
                                     <div className="reactions">
-                                        <button onClick={() => handleReaction(post.id, "like")}>
-                                            👍 {(post.reactions?.like || []).map((reaction) => reaction.userName).join(", ")}
-                                        </button>
-                                        <button onClick={() => handleReaction(post.id, "love")}>
-                                            ❤️ {(post.reactions?.love || []).map((reaction) => reaction.userName).join(", ")}
-                                        </button>
+                                        <button onClick={() => handleReaction(post.id, "like")}>👍</button>
+                                        <button onClick={() => handleReaction(post.id, "love")}>❤️</button>
                                     </div>
 
                                     <div className="comments">

@@ -190,3 +190,61 @@
     align-items: center;
     margin-bottom: 10px; /* Se você quiser separar um pouco os comentários */
 }
+
+.edit-post-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 6px solid #8e44ad;
+    transition: background 0.3s ease;
+    position: relative;
+}
+
+.edit-post-container textarea {
+    width: 100%;
+    height: 90px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #f4f4f4;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.edit-post-container textarea:focus {
+    border-color: #8e44ad;
+}
+
+.edit-post-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.edit-post-actions button {
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-post-actions button:hover {
+    background-color: #732d91;
+}
+
+.edit-post-actions .cancel-btn {
+    background-color: #ccc;
+    color: #333;
+}
+
+.edit-post-actions .cancel-btn:hover {
+    background-color: #999;
+}
