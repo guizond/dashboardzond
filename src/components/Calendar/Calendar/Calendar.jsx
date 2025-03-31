@@ -209,8 +209,8 @@ return (
             <EventForm
                 onSave={handleSaveEvent}
                 onClose={() => setIsModalOpen(false)}
-                start={selectedDate}  // Passando a data de início
-                end={selectedEndDate}  // Passando a data de fim
+                start={selectedDate}
+                end={selectedEndDate}
             />
         )}
     </div>

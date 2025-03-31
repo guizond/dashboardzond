@@ -59,8 +59,8 @@ const FAQPage = () => {
               <div className="faq-details">
                 <p>Descrição: {faq.description}</p>
                 <a href={faq.link} target="_blank" rel="noopener noreferrer">
-  {faq.link ? decodeURIComponent(faq.link.split('/').pop().replace(/[-_]/g, ' ')) : "Ver Documento"}
-</a>
+                {faq.link ? decodeURIComponent(faq.link.split('/').pop().replace(/[-_]/g, ' ')) : "Ver Documento"}
+              </a>
               </div>
             )}
           </div>
@@ -68,37 +68,37 @@ const FAQPage = () => {
       </div>
 
       {isFormOpen && (
-  <div className="modal-overlay" onClick={() => setIsFormOpen(false)}>
-    <div className="modal" onClick={(e) => e.stopPropagation()}>
-      <h2>Adicionar FAQ</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Título"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Descrição"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input
-          type="url"
-          placeholder="Link do Documento"
-          value={link}
-          onChange={(e) => setLink(e.target.value)}
-          required
-        />
-        <div className="modal-buttons">
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setIsFormOpen(false)}>Fechar</button>
+        <div className="modal-overlay" onClick={() => setIsFormOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Adicionar FAQ</h2>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Título"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+              <textarea
+                placeholder="Descrição"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <input
+                type="url"
+                placeholder="Link do Documento"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                required
+              />
+              <div className="modal-buttons">
+                <button type="submit">Salvar</button>
+                <button type="button" onClick={() => setIsFormOpen(false)}>Fechar</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-)}
+      )}
     </div>
     );
 };

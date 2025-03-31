@@ -1,22 +1,32 @@
 import { useEffect, useState } from "react";
 import { auth } from "../../firebaseConfig";
 import './Home.css'
+import PostSection from "../../components/PostSection/PostSection";
+import GeneralNotifications from "../../components/GeneralNotifications/GeneralNotifications";
+import UserNotifications from "../../components/UserNotifications/UserNotifications";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Home = () => {
-  const [userName, setUserName] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     document.title = "Home";
-    const user = auth.currentUser;
-    if (user) {
-      setUserName(user.displayName);
-    }
+
+    // Ouvinte para mudanças no estado de autenticação
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe(); // Limpa o ouvinte ao desmontar o componente
   }, []);
 
   return (
-    <div className="home-container">
-      <h1>Bem-vindo {userName ? userName : "Usuário"}!</h1> 
-      <p>Essa página ainda está em construção, estamos trabalhando para finalizá-la o quanto antes.</p>
+    <div>
+      {user ? (
+        <PostSection userId={user.uid} />
+      ) : (
+        <p>Carregando...</p>
+      )}
     </div>
   );
 };
