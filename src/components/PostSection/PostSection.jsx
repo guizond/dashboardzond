@@ -21,7 +21,11 @@ const PostSection = ({ userId }) => {
                 id: doc.id,
                 ...doc.data(),
             }));
-            postsData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            postsData.sort((a, b) => {
+                const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
+                const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
+                return timeB - timeA;
+            });
             setPosts(postsData);
         });
 
@@ -75,17 +79,33 @@ const PostSection = ({ userId }) => {
         setMenuOpen(menuOpen === postId ? null : postId);
     };
 
-    const handleReaction = async (postId, reactionType) => {
+    const handleReaction = async (postId, type) => {
+        if (!userId) {
+            console.error("Erro: userId indefinido");
+            return;
+        }
+  
         try {
             const postRef = doc(db, "posts", postId);
-            const postSnap = await getDoc(postRef);
-            if (!postSnap.exists()) return;
-
-            const postData = postSnap.data();
-            const userReacted = postData.reactions[reactionType]?.includes(userId);
-            await updateDoc(postRef, {
-                [`reactions.${reactionType}`]: userReacted ? arrayRemove(userId) : arrayUnion(userId)
-            });
+            const postSnapshot = await getDoc(postRef);
+  
+            if (!postSnapshot.exists()) {
+                console.error("Erro: Post não encontrado");
+                return;
+            }
+  
+            const postData = postSnapshot.data();
+            const currentReactions = postData.reactions?.[type] || [];
+  
+            if (currentReactions.some(reaction => reaction.userId === userId)) {
+                await updateDoc(postRef, {
+                    [`reactions.${type}`]: arrayRemove({ userId, userName: userName })
+                });
+            } else {
+                await updateDoc(postRef, {
+                    [`reactions.${type}`]: arrayUnion({ userId, userName: userName })
+                });
+            }
         } catch (error) {
             console.error("Erro ao reagir ao post:", error);
         }
@@ -169,9 +189,14 @@ const PostSection = ({ userId }) => {
                                     )}
 
                                     <div className="reactions">
-                                        <button onClick={() => handleReaction(post.id, "like")}>👍</button>
-                                        <button onClick={() => handleReaction(post.id, "love")}>❤️</button>
+                                        <button onClick={() => handleReaction(post.id, "like")}>
+                                            👍 {(post.reactions?.like || []).map((reaction) => reaction.userName).join(", ")}
+                                        </button>
+                                        <button onClick={() => handleReaction(post.id, "love")}>
+                                        ✅ {(post.reactions?.love || []).map((reaction) => reaction.userName).join(", ")}
+                                        </button>
                                     </div>
+
 
                                     <div className="comments">
                                         <input
@@ -202,7 +227,7 @@ const PostSection = ({ userId }) => {
                         </div>
                     ))
                 ) : (
-                    <p>Nenhum post encontrado.</p>
+                    <div className="zero-post"><p>Nenhum post encontrado.</p></div>
                 )}
             </div>
         </div>

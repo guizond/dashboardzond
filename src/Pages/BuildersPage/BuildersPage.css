@@ -10,8 +10,10 @@
 
 .builders-header-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between; /* <-- isso aqui faz o truque */
+    align-items: center;
     margin-bottom: 15px;
+    padding: 0 10px;
 }
 
 .add-builder-button {
@@ -246,4 +248,21 @@
     margin: 0;
     flex-grow: 1;
     white-space: nowrap;
+}
+
+.sort-controls{
+    display: flex;
+
+}
+
+.sort-controls-button{
+    background-color: #A85FD9;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 150px;
+  margin-bottom: 20px;
 }

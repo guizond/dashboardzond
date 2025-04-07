@@ -21,6 +21,8 @@ const BuildersPage = () => {
     const [storeCountry, setStoreCountry] = useState("");
     const [expandedCard, setExpandedCard] = useState(null);
     const [isActive, setIsActive] = useState(true);
+    const [sortBy, setSortBy] = useState("whitelabel");
+    const [sortOrder, setSortOrder] = useState("asc");
 
     const buildersCollectionRef = collection(db, "builders");
       
@@ -51,7 +53,8 @@ const BuildersPage = () => {
             storeLanguage, 
             builderLanguage, 
             storeCountry,
-            isActive
+            isActive,
+            createdAt: new Date()
         };
       
         const docRef = await addDoc(buildersCollectionRef, newBuilder);
@@ -93,14 +96,48 @@ const BuildersPage = () => {
         }
     };
 
+    const sortedBuilders = [...builders].sort((a, b) => {
+        let valA = a[sortBy] || "";
+        let valB = b[sortBy] || "";
+    
+        // Se for 'createdAt', trata como data
+        if (sortBy === "createdAt") {
+            const dateA = valA?.toDate ? valA.toDate() : new Date(valA);
+            const dateB = valB?.toDate ? valB.toDate() : new Date(valB);
+            return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        }
+    
+        // Tenta converter para número se possível
+        const numA = parseFloat(valA);
+        const numB = parseFloat(valB);
+    
+        const isNumeric = !isNaN(numA) && !isNaN(numB);
+    
+        if (isNumeric) {
+            return sortOrder === "asc" ? numA - numB : numB - numA;
+        }
+    
+        // Fallback para string normal
+        valA = valA.toLowerCase();
+        valB = valB.toLowerCase();
+        return sortOrder === "asc"
+            ? valA.localeCompare(valB)
+            : valB.localeCompare(valA);
+    });
+
     return (
         <div className="builders-container">
-            <div className="builder-header-container">
+            <div className="builders-header-container">
+                <button
+                    className="sort-controls-button"
+                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+                    {sortOrder === "asc" ? "⬆ Crescente" : "⬇ Decrescente"}
+                </button>
                 <button className="add-builder-button" onClick={() => setIsFormOpen(true)}>+ Adicionar Builder</button>
             </div>
 
             <div className="builders-list">
-                {builders.map((builder) => (
+                {sortedBuilders.map((builder) => (
                     <div key={builder.id} className="builder-card" onClick={() => handleCardClick(builder.id)}>
                         <div className="builder-card-header">
                             <h3>{`${builder.whitelabel} - ${builder.builderName}`}</h3>
